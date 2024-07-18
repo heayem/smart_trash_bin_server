@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "nodemon": "^3.1.4",
     "openai": "^4.52.7",
     "torch": "^0.2.7",
     "transformers": "^3.1.0"

@@ -8,11 +8,16 @@ import dotenv from 'dotenv';
 dotenv.config();  
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 app.use(bodyParser.json());
 app.use(cors());  // Enable CORS for all routes
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send('Wele come to smart trash bin!');
+});
 
 app.post('/api/chat', async (req, res) => {
     const { userLocation, bins, stations, message } = req.body;
