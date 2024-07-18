@@ -1,35 +1,40 @@
-
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
-dotenv.config();  
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 app.use(bodyParser.json());
-app.use(cors());  // Enable CORS for all routes
+app.use(
+  cors({
+    origin: "https://training-smart-trash-bin.web.app",
+    methods: "GET,POST",
+    allowedHeaders: "Content-Type",
+  })
+);
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Wele come to smart trash bin!');
+app.get("/", (req, res) => {
+  res.send("Wele come to smart trash bin!");
 });
 
-app.post('/api/chat', async (req, res) => {
-    const { userLocation, bins, stations, message } = req.body;
+app.post("/api/chat", async (req, res) => {
+  const { userLocation, bins, stations, message } = req.body;
 
-    const data = {
-        userLocation,
-        bins,
-        stations,
-        message
-    };
+  const data = {
+    userLocation,
+    bins,
+    stations,
+    message,
+  };
 
-    const prompt = `
+  const prompt = `
         Here is the data for user location, bins, and stations:
         User Location: ${JSON.stringify(userLocation)}
         Bins: ${JSON.stringify(bins, null, 2)}
@@ -49,19 +54,21 @@ app.post('/api/chat', async (req, res) => {
         "Route Summary: Start - bin-8 - bin-7 - bin-6 - bin-5 - bin-2 - bin-3 - bin-4 - bin-1 - bin-9 - End at station-2, Total Distance: 37.43 km"
     `;
 
-    try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const result = await model.generateContent([prompt]);
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const result = await model.generateContent([prompt]);
 
-        const routeSummary = result.response.text().match(/Route Summary: Start - bin.*/)[0];
-        res.json({ reply: routeSummary });
-        console.log(result.response.text());
-    } catch (error) {
-        console.error('Error fetching AI suggestion:', error);
-        res.status(500).send(error.message);
-    }
+    const routeSummary = result.response
+      .text()
+      .match(/Route Summary: Start - bin.*/)[0];
+    res.json({ reply: routeSummary });
+    console.log(result.response.text());
+  } catch (error) {
+    console.error("Error fetching AI suggestion:", error);
+    res.status(500).send(error.message);
+  }
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
