@@ -11,13 +11,7 @@ const port = process.env.PORT || 3000;
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 app.use(bodyParser.json());
-app.use(
-  cors({
-    origin: "https://training-smart-trash-bin.web.app",
-    methods: "GET,POST",
-    allowedHeaders: "Content-Type",
-  })
-);
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
