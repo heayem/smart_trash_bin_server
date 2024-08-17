@@ -27,7 +27,7 @@ app.post("/api/chat", async (req, res) => {
     stations,
     message,
   };
-
+ 
   const prompt = `
         Here is the data for user location, bins, and stations:
         User Location: ${JSON.stringify(userLocation)}
@@ -45,7 +45,8 @@ app.post("/api/chat", async (req, res) => {
         - **No priority station:** The route can end at any station.
 
         Example Route Summary: 
-        "Route Summary: Start - bin-8 - bin-7 - bin-6 - bin-5 - bin-2 - bin-3 - bin-4 - bin-1 - bin-9 - End at station-2, Total Distance: 37.43 km"
+        "Route Summary: Start - bin-8 - bin-6 - bin-5 - bin-2 - bin-3  - bin-1 - bin-9 - End at station-2, Total Distance: 37.43 km, "
+        "bins":{[latitude: 11.5681, longitude: 104.8947], [latitude: 11.5681, longitude: 104.8947]}
     `;
 
   try {
@@ -56,9 +57,7 @@ app.post("/api/chat", async (req, res) => {
       .text()
       .match(/Route Summary: Start - bin.*/)[0];
     res.json({ reply: routeSummary });
-    console.log(result.response.text());
   } catch (error) {
-    console.error("Error fetching AI suggestion:", error);
     res.status(500).send(error.message);
   }
 });
