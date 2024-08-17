@@ -45,9 +45,7 @@ app.post("/api/chat", async (req, res) => {
         - **No priority station:** The route can end at any station.
 
         Example Route Summary: 
-        "Route Summary: Start - bin-8 - bin-6 - bin-5 - bin-2 - bin-3  - bin-1 - bin-9 - End at station-2, Total Distance: 37.43 km, "
-        "bins":{[latitude: 11.5681, longitude: 104.8947], [latitude: 11.5681, longitude: 104.8947]}
-    `;
+        "Route Summary: Start - bin-8 - bin-6 - bin-5 - bin-2 - bin-3  - bin-1 - bin-9 - End at station-2, Total Distance: 37.43 km, "`;
 
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
